@@ -79,8 +79,8 @@ class HomePageUi(QWidget):
         font.setBold(True)
         item.setFont(font)
         information_table.setItem(0, 1, item)
-        information_table.setItem(1, 1, QTableWidgetItem("27.12.2023")) #VERSION
-        information_table.setItem(2, 1, QTableWidgetItem("2.4.7")) #VERSION
+        information_table.setItem(1, 1, QTableWidgetItem("12.05.2024")) #VERSION
+        information_table.setItem(2, 1, QTableWidgetItem("2.4.8")) #VERSION
         information_table.setItem(3, 1, QTableWidgetItem("GPLv3"))
         information_table.setItem(4, 1, QTableWidgetItem("Chem. Commun., 2022, 58, 6381-6384"))
         item = QTableWidgetItem("10.1039/D2CC02238A")

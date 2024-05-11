@@ -63,7 +63,7 @@ class Launcher(QApplication):
 if __name__ == "__main__":
     response = requests.get("https://api.github.com/repos/ZychuDev/relACs/releases")
     if response.ok:
-        release = "2.4.7" #VERSION
+        release = "2.4.8" #VERSION
         latest_relase= response.json()[0]["tag_name"]
         if latest_relase != release:
             launcher = Launcher(sys.argv)

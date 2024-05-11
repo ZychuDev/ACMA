@@ -31,7 +31,7 @@ class MplCanvas(FigureCanvasQTAgg):
         self.ax.yaxis.set_major_locator(LinearLocator(8))
         self.temp_label = r"$\frac{K}{T}$"
         self.field_label = r"$\frac{H}{Oe}$"
-        title = r"$\tau^{-1}=A_{dir}TH^{N_{dir}} + \frac{B_1(1+B_3H^2)}{1+B_2H^2} + C_{Raman_{1}}T^{N_{Raman_{1}}} + C_{Raman_{2}}T^{N_{Raman_{2}}}H^{m_{2}}+\tau_0^{-1}\exp{\frac{-\Delta E}{T}} + D\frac{\exp{\frac{-V}{T}}}{(\exp{\frac{-V}{T}}-1)^2}$"
+        title = r"$\tau^{-1}=A_{dir}TH^{N_{dir}} + \frac{B_1(1+B_3H^2)}{1+B_2H^2} + C_{Raman_{1}}T^{N_{Raman_{1}}} + C_{Raman_{2}}T^{N_{Raman_{2}}}H^{m_{2}}+\tau_0^{-1}\exp{\frac{-\Delta E}{T}} + D\frac{\exp{\frac{V}{T}}}{(\exp{\frac{V}{T}}-1)^2}$"
         self.ax.set(xlabel=self.temp_label, ylabel=r"$\ln{\frac{\tau}{s}}$",
          title=title)
 

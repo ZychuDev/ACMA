@@ -279,7 +279,8 @@ class Fit(QObject):
         if len(self.relaxations) == 1:
             not_blocked_parameters:list[Parameter] = []
             blocked_parameters:list[Parameter] = []  
-
+            fit_bounds = ([p.min for p in not_blocked_parameters], [p.max for p in not_blocked_parameters])
+            
             for j, p in enumerate(self.relaxations[0].parameters):
                 if p.is_blocked:
                     blocked_parameters.append(p)
@@ -328,7 +329,7 @@ def meta_auto_fit(self):
 
     try:
         try:
-            res = least_squares(cost_function, not_blocked_params, ftol=tole["f_tol"], xtol=tole["x_tol"], gtol=tole["g_tol"])
+            res = least_squares(cost_function, not_blocked_params, bounds=bounds, ftol=tole["f_tol"], xtol=tole["x_tol"], gtol=tole["g_tol"])
         except ValueError as e:
             msg: QMessageBox = QMessageBox()
             msg.setIcon(QMessageBox.Icon.Warning)
@@ -372,7 +373,7 @@ def meta_auto_fit(self):
             self.copy_all_relxations(next_fit)   
                               
 meta_auto_fit(self)
-                    """, {"self": self, "SettingsReader":SettingsReader, "not_blocked_params": not_blocked_params, "QMessageBox":QMessageBox, "svd":svd,
+                    """, {"self": self, "SettingsReader":SettingsReader, "not_blocked_params": not_blocked_params, "bounds":fit_bounds, "QMessageBox":QMessageBox, "svd":svd,
                           "finfo":finfo, "np_max":np_max, "sum":sum, "sqrt":sqrt, "not_blocked_parameters":not_blocked_parameters, "blocked_parameters": blocked_parameters,
                            "next_fit": next_fit, "least_squares": least_squares, "diag":diag, "auto":auto })
             return

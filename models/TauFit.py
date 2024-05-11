@@ -124,7 +124,7 @@ class TauFit(QObject):
 
     @staticmethod
     def V_d(temp:float, v: float, d: float):
-        return d *(exp(-v/temp)/pow(exp(-v/temp) -1.0,2.0))
+        return d *(exp(v/temp)/pow(exp(v/temp) -1.0,2.0))
     
     @staticmethod
     def model(temp:float, field:float, a_dir:float, n_dir:float, b1:float, b2:float,
@@ -156,7 +156,7 @@ class TauFit(QObject):
             + c_raman_1 * power(temp, n_raman_1) \
             + c_raman_2 * power(temp, n_raman_2) * power(field, m_2) \
             + tau_0 *exp(-delta_e/(temp)) \
-            + d *(exp(-v/temp)/pow(exp(-v/temp) -1.0,2.0))
+            + d *(exp(v/temp)/pow(exp(v/temp) -1.0,2.0))
 
 
     def __init__(self, name: str, compound: SettingsSource, collection):
@@ -519,14 +519,15 @@ class TauFit(QObject):
         not_blocked_names = [p.name for p in not_blocked_parameters]
         not_blocked_params = [p.value for p in not_blocked_parameters]
         blocked_on_0_parameters_names = [p.name for p in blocked_on_0_parameters]
+        fit_bounds = ([p.min for p in not_blocked_parameters], [p.max for p in not_blocked_parameters])
 
-
+        
         model_body = """return {a_dir}*temp*(field**{n_dir}) \
             + {b1}*(1+{b3}*field*field)/(1+{b2}*field*field) \
             + {c_raman_1} * power(temp, {n_raman_1}) \
             + {c_raman_2} * power(temp, {n_raman_2}) * power(field, {m_2}) \
             + {tau_0} *exp(-{delta_e}/(temp)) \
-            + {d} *(exp(-{v}/temp)/pow(exp(-{v}/temp) -1.0,2.0)) """.format(
+            + {d} *(exp({v}/temp)/pow(exp({v}/temp) -1.0,2.0)) """.format(
             a_dir = "a_dir" if ("a_dir" in not_blocked_names) else (0.0 if "a_dir" in blocked_on_0_parameters_names else next((x for x in blocked_parameters if x.name == "a_dir")).value),
             n_dir = "n_dir" if ("n_dir" in not_blocked_names) else (0.0 if "n_dir" in blocked_on_0_parameters_names else next((x for x in blocked_parameters if x.name == "n_dir")).value),
             b1 = "b1" if ("b1" in not_blocked_names) else (0.0 if "b1" in blocked_on_0_parameters_names else next((x for x in blocked_parameters if x.name == "b1")).value),
@@ -566,7 +567,7 @@ def meta_auto_fit(self):
     tole = settings.get_tolerances()
     try:
         try:
-            res = least_squares(cost_function, params, ftol=tole["f_tol"], xtol=tole["x_tol"], gtol=tole["g_tol"])
+            res = least_squares(cost_function, params, bounds=bounds, ftol=tole["f_tol"], xtol=tole["x_tol"], gtol=tole["g_tol"])
         except ValueError as e:
             msg: QMessageBox = QMessageBox()
             msg.setIcon(QMessageBox.Icon.Warning)
@@ -607,7 +608,7 @@ def meta_auto_fit(self):
 meta_auto_fit(self)
         """, {
             "self":self, "slice":slice_flag, "Series": Series, "abs": abs, "log":log, "SettingsReader":SettingsReader, "QMessageBox":QMessageBox,
-            "params":not_blocked_params, "svd":svd, "finfo":finfo, "np_max":np_max, "sum":sum, "sqrt":sqrt, "least_squares": least_squares, "diag":diag,
+            "params":not_blocked_params, "bounds":fit_bounds, "svd":svd, "finfo":finfo, "np_max":np_max, "sum":sum, "sqrt":sqrt, "least_squares": least_squares, "diag":diag,
             "not_blocked_parameters":not_blocked_parameters, "blocked_parameters":blocked_parameters, "blocked_on_0_parameters":blocked_on_0_parameters,
         })
 
