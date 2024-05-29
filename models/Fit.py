@@ -279,8 +279,7 @@ class Fit(QObject):
         if len(self.relaxations) == 1:
             not_blocked_parameters:list[Parameter] = []
             blocked_parameters:list[Parameter] = []  
-            fit_bounds = ([p.min for p in not_blocked_parameters], [p.max for p in not_blocked_parameters])
-            
+                        
             for j, p in enumerate(self.relaxations[0].parameters):
                 if p.is_blocked:
                     blocked_parameters.append(p)
@@ -293,6 +292,8 @@ class Fit(QObject):
 
             not_blocked_names = [p.name for p in not_blocked_parameters]
             not_blocked_params = [p.value for p in not_blocked_parameters]
+
+            fit_bounds = ([p.min for p in not_blocked_parameters], [p.max for p in not_blocked_parameters])
 
             model_body = "return {chi_s} + ({chi_dif})/((1 + (10**logFrequency*2*pi * power(10, {tau}) * 1j )**(1- {alpha}))**{beta})".format(
                 chi_s="chi_s" if "chi_s" in not_blocked_names else next((x for x in blocked_parameters if x.name == "chi_s")).value,
